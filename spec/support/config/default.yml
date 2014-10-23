@@ -1,1 +1,6 @@
 app_id: app id
+secret: /path/to/secret/secret.p12
+alpha: /path/to/alpha/app.apk
+beta: /path/to/beta/app.apk
+rollout: /path/to/rollout/app.apk
+production: /path/to/production/app.apk

@@ -1,6 +1,9 @@
 require 'yaml'
 require 'play_time/version'
+require 'play_time/track'
 require 'play_time/configuration'
+require 'play_time/deploy'
+require 'play_time/uploader'
 
 module PlayTime
   def self.config_path
@@ -9,5 +12,10 @@ module PlayTime
 
   def self.configuration
     @configuration ||= Configuration.new(YAML.load(open(config_path).read))
+  end
+
+  def self.deploy(track)
+    deploy = Deploy.new
+    deploy.deploy(track)
   end
 end
