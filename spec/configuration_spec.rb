@@ -9,13 +9,27 @@ describe PlayTime::Configuration do
         expect(subject).to eq 'app id'
       end
     end
+  end
 
-    context 'with symbol hash' do
-      let(:configuration) { PlayTime::Configuration.new({app_id: 'app id'}) }
+  describe '#apk_path' do
+    let(:apk_path) { 'apk_path' }
+    let(:track) { 'track' }
+    let(:configuration) { PlayTime::Configuration.new({ track => apk_path }) }
 
-      it 'loads the app id value' do
-        expect(subject).to eq 'app id'
-      end
+    subject { configuration.apk_path(track: track) }
+
+    before do
+      allow(PlayTime::Track).to receive(:validate!)
+    end
+
+    it 'returns the apk path' do
+      expect(subject).to eq apk_path
+    end
+
+    it 'validates the track' do
+      subject
+
+      expect(PlayTime::Track).to have_received(:validate!).with(track)
     end
   end
 end
