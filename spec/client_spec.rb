@@ -67,7 +67,7 @@ describe PlayTime::Client do
   describe '#commit' do
     let(:track) { 'alpha' }
     let(:service) { double(Google::APIClient::API) }
-    let(:response) { double(:response, data: double(:data, id: 'id')) }
+    let(:response) { double(:response, data: double(:data, id: 'id', versionCode: 'version code')) }
     let(:apk_file) { instance_double(Google::APIClient::UploadIO) }
 
     subject { PlayTime::Client.new.commit(track) }
@@ -114,7 +114,8 @@ describe PlayTime::Client do
       expect(PlayTime::Runner).to have_received(:run!).with(
         api_client,
         api_method: 'track update',
-        parameters: { packageName: 'com.package.name', editId: 'id', track: track }
+        parameters: { packageName: 'com.package.name', editId: 'id', track: track },
+        body_object: { versionCodes: ['version code'] }
       )
     end
 
