@@ -7,6 +7,16 @@ describe PlayTime::Configuration do
     it "fetchings the option from the config" do
       expect(subject).to eq option
     end
+
+    context 'missing options' do
+      let(:configuration) { PlayTime::Configuration.new({'foo' => 'bar'}) }
+
+      it "raises an exception for each missing param" do
+        expect {
+          subject
+        }.to raise_error PlayTime::Configuration::MissingOption, "Missing #{option} in #{PlayTime.config_path}"
+      end
+    end
   end
 
   PlayTime::Configuration::OPTIONS.each do |option|
