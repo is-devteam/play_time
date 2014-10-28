@@ -2,30 +2,23 @@ describe PlayTime, if: PlayTime.config_path.end_with?('default.yml') do
   describe '.configuration' do
     subject { PlayTime.configuration }
 
-    it 'provides a nice getter for the app id' do
-      expect(subject.app_id).to eq 'app id'
+    it 'returns a PlayTime::Configuration object' do
+      expect(subject).to be_a PlayTime::Configuration
     end
   end
 
-  describe '.deploy' do
-    let(:deploy) { instance_double(PlayTime::Deploy) }
+  describe '.upload' do
+    let(:apk_path) { '/path/to/app.apk' }
+    let(:track) { PlayTime::Track::ALPHA }
 
-    subject { PlayTime.deploy(track) }
+    subject { PlayTime.upload(track) }
 
-    before do
-      allow(PlayTime::Deploy).to receive(:new).and_return(deploy)
-    end
+    it 'uploads the apk with the track' do
+      allow(PlayTime::Upload).to receive(:upload)
 
-    context 'with alpha track' do
-      let(:track) { PlayTime::Track::ALPHA }
+      subject
 
-      it 'deploys the track' do
-        allow(deploy).to receive(:deploy)
-
-        subject
-
-        expect(deploy).to have_received(:deploy).with(track)
-      end
+      expect(PlayTime::Upload).to have_received(:upload).with(track)
     end
   end
 end
