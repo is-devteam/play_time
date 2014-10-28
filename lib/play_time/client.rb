@@ -27,22 +27,26 @@ module PlayTime
     attr_reader :edit_id, :version_code
 
     def create_insert
-      @edit_id = Runner.run!(client, api_method: service.edits.insert, parameters: parameters).data.id
+      @edit_id = run!(api_method: service.edits.insert, parameters: parameters).data.id
     end
 
     def upload_apk
       upload_params = parameters.merge(editId: edit_id, uploadType: 'media')
-      @version_code = Runner.run!(client, api_method: service.edits.apks.upload, parameters: upload_params, media: Apk.load).data.versionCode
+      @version_code = run!(api_method: service.edits.apks.upload, parameters: upload_params, media: Apk.load).data.versionCode
     end
 
     def update_track(track)
       update_params = parameters.merge(editId: edit_id, track: track)
-      Runner.run! client, api_method: service.edits.tracks.update, parameters: update_params, body_object: { versionCodes: [version_code] }
+      run! api_method: service.edits.tracks.update, parameters: update_params, body_object: { versionCodes: [version_code] }
     end
 
     def save
       commit_params = parameters.merge(editId: edit_id)
-      Runner.run! client, api_method: service.edits.commit, parameters: commit_params
+      run! api_method: service.edits.commit, parameters: commit_params
+    end
+
+    def run!(options = {})
+      Runner.run! client, options
     end
 
     def parameters
