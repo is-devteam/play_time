@@ -46,7 +46,7 @@ module PlayTime
     end
 
     def parameters
-      {package_name: PlayTime.configuration.package_name}
+      {packageName: PlayTime.configuration.package_name}
     end
 
     def client

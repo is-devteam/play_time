@@ -94,7 +94,7 @@ describe PlayTime::Client do
       subject
 
       expect(PlayTime::Runner).to have_received(:run!).with(
-        api_client, api_method: 'insert', parameters: { package_name: 'com.package.name' })
+        api_client, api_method: 'insert', parameters: { packageName: 'com.package.name' })
     end
 
     it 'uploads an apk file' do
@@ -103,7 +103,7 @@ describe PlayTime::Client do
       expect(PlayTime::Runner).to have_received(:run!).with(
         api_client,
         api_method: 'upload',
-        parameters: { package_name: 'com.package.name', editId: 'id', uploadType: 'media' },
+        parameters: { packageName: 'com.package.name', editId: 'id', uploadType: 'media' },
         media: apk_file
       )
     end
@@ -114,7 +114,7 @@ describe PlayTime::Client do
       expect(PlayTime::Runner).to have_received(:run!).with(
         api_client,
         api_method: 'track update',
-        parameters: { package_name: 'com.package.name', editId: 'id', track: track }
+        parameters: { packageName: 'com.package.name', editId: 'id', track: track }
       )
     end
 
@@ -124,7 +124,7 @@ describe PlayTime::Client do
       expect(PlayTime::Runner).to have_received(:run!).with(
         api_client,
         api_method: 'commit',
-        parameters: { package_name: 'com.package.name', editId: 'id' }
+        parameters: { packageName: 'com.package.name', editId: 'id' }
       )
     end
   end
