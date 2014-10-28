@@ -1,5 +1,7 @@
 package_name: com.example.app
 secret_path: /path/to/secret/secret.p12
+secret_passphrase: notasecret
 apk_path: /path/to/alpha/app.apk
-client_name: 'Google API Client Name'
-client_version: '1.0.0'
+client_name: Google API Client Name
+client_version: 1.0.0
+issuer: issuer@developer.gserviceaccount.com
