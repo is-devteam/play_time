@@ -134,7 +134,9 @@ describe PlayTime::Client do
     let(:version_code) { 99 }
     let(:track) { 'alpha' }
     let(:service) { double(Google::APIClient::API) }
-    let(:response) { double(:response, data: double(:data, id: 'id')) }
+    let(:data) { double(:data, id: 'id', tracks: tracks) }
+    let(:response) { double(:response, data: data) }
+    let(:tracks) { [double(:track, track: 'old track', versionCodes: [version_code])] }
 
     subject { PlayTime::Client.new.update(track, version_code) }
 
@@ -144,6 +146,7 @@ describe PlayTime::Client do
       allow(api_client).to receive(:discovered_api).and_return(service)
       allow(service).to receive_message_chain('edits.insert').and_return('insert')
       allow(service).to receive_message_chain('edits.tracks.update').and_return('track update')
+      allow(service).to receive_message_chain('edits.tracks.list').and_return('lists')
       allow(service).to receive_message_chain('edits.commit').and_return('commit')
     end
 
@@ -159,6 +162,59 @@ describe PlayTime::Client do
 
       expect(PlayTime::Runner).to have_received(:run!).with(
         api_client, api_method: 'insert', parameters: { packageName: 'com.package.name' })
+    end
+
+    context 'when the version code is in no other track' do
+      let(:tracks) { [double(:track, track: 'old track', versionCodes: [-23])] }
+
+      it 'raises an error' do
+        expect {
+          subject
+        }.to raise_error PlayTime::Client::VersionCodeNotFound, version_code.to_s
+      end
+    end
+
+    context 'when the version code is in another track' do
+      let(:tracks) { [double(:track, track: 'old track', versionCodes: [version_code])] }
+
+      context 'when it is the only version in that track' do
+        it 'removes everything from the old track' do
+          subject
+
+          expect(PlayTime::Runner).to have_received(:run!).with(
+            api_client,
+            api_method: 'track update',
+            parameters: { packageName: 'com.package.name', editId: 'id', track: 'old track' },
+            body_object: { versionCodes: [] }
+          )
+        end
+      end
+
+      context 'when there are other versions in the track' do
+        let(:tracks) { [double(:track, track: 'old track', versionCodes: [version_code, 100])] }
+
+        it 'only removes itself from the track' do
+          subject
+
+          expect(PlayTime::Runner).to have_received(:run!).with(
+            api_client,
+            api_method: 'track update',
+            parameters: { packageName: 'com.package.name', editId: 'id', track: 'old track' },
+            body_object: { versionCodes: [100] }
+          )
+        end
+      end
+    end
+
+    it 'updates a track with the new version code' do
+      subject
+
+      expect(PlayTime::Runner).to have_received(:run!).with(
+        api_client,
+        api_method: 'track update',
+        parameters: { packageName: 'com.package.name', editId: 'id', track: track },
+        body_object: { versionCodes: [version_code] }
+      )
     end
 
     it 'updates a track with the new version code' do

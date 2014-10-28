@@ -5,6 +5,8 @@ require 'play_time/apk'
 
 module PlayTime
   class Client
+    class VersionCodeNotFound < StandardError; end
+
     TOKEN_URI   = 'https://accounts.google.com/o/oauth2/token'.freeze
     SCOPE       = 'https://www.googleapis.com/auth/androidpublisher'.freeze
     API         = 'androidpublisher'.freeze
@@ -17,34 +19,45 @@ module PlayTime
 
     def commit(track)
       create_insert
-      upload_apk
-      update_track(track)
+      version_code = upload_apk
+      update_track(track, version_code)
       save
     end
 
     def update(track, version_code)
       create_insert
-      @version_code = version_code
-      update_track(track)
+      old_track = get_old_track! version_code
+      update_track(old_track.track, *old_track.versionCodes - [version_code])
+      update_track(track, version_code)
       save
     end
 
     private
 
-    attr_reader :edit_id, :version_code
+    attr_reader :edit_id
 
     def create_insert
       @edit_id = run!(api_method: service.edits.insert, parameters: parameters).data.id
     end
 
-    def upload_apk
-      upload_params = parameters.merge(editId: edit_id, uploadType: 'media')
-      @version_code = run!(api_method: service.edits.apks.upload, parameters: upload_params, media: Apk.load).data.versionCode
+    def get_old_track!(version_code)
+      old_track = get_tracks.find { |track| track.versionCodes.include? version_code }
+
+      old_track || raise(VersionCodeNotFound, version_code)
     end
 
-    def update_track(track)
+    def get_tracks
+      run!(api_method: service.edits.tracks.list, parameters: parameters.merge(editId: edit_id)).data.tracks
+    end
+
+    def upload_apk
+      upload_params = parameters.merge(editId: edit_id, uploadType: 'media')
+      run!(api_method: service.edits.apks.upload, parameters: upload_params, media: Apk.load).data.versionCode
+    end
+
+    def update_track(track, *version_codes)
       update_params = parameters.merge(editId: edit_id, track: track)
-      run! api_method: service.edits.tracks.update, parameters: update_params, body_object: { versionCodes: [version_code] }
+      run! api_method: service.edits.tracks.update, parameters: update_params, body_object: { versionCodes: version_codes }
     end
 
     def save
