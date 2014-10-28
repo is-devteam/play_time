@@ -22,6 +22,8 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+* add promotion syntax like `rake play_time:promote['alpha', 'beta']`
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/play_time/fork )
