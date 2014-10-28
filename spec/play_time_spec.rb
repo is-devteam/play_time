@@ -8,7 +8,6 @@ describe PlayTime, if: PlayTime.config_path.end_with?('default.yml') do
   end
 
   describe '.upload' do
-    let(:apk_path) { '/path/to/app.apk' }
     let(:track) { PlayTime::Track::ALPHA }
 
     subject { PlayTime.upload(track) }
@@ -19,6 +18,21 @@ describe PlayTime, if: PlayTime.config_path.end_with?('default.yml') do
       subject
 
       expect(PlayTime::Upload).to have_received(:upload).with(track)
+    end
+  end
+
+  describe '.promote' do
+    let(:version_code) { 99 }
+    let(:track) { PlayTime::Track::BETA }
+
+    subject { PlayTime.promote(version_code, track) }
+
+    it 'promotes the version code' do
+      allow(PlayTime::Promote).to receive(:promote)
+
+      subject
+
+      expect(PlayTime::Promote).to have_received(:promote).with(version_code, track)
     end
   end
 end
