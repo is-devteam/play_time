@@ -1,6 +1,6 @@
 app_id: app id
-secret: /path/to/secret/secret.p12
-alpha: /path/to/alpha/app.apk
-beta: /path/to/beta/app.apk
-rollout: /path/to/rollout/app.apk
-production: /path/to/production/app.apk
+package_name: com.example.app
+secret_path: /path/to/secret/secret.p12
+apk_path: /path/to/alpha/app.apk
+client_name: 'Google API Client Name'
+client_version: '1.0.0'

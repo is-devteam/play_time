@@ -1,35 +1,19 @@
 describe PlayTime::Configuration do
-  describe '#app_id' do
-    subject { configuration.app_id }
+  shared_examples_for 'configuration option' do
+    let(:configuration) { PlayTime::Configuration.new({option.to_s => option, 'foo' => 'bar'}) }
 
-    context 'with string hash' do
-      let(:configuration) { PlayTime::Configuration.new({'app_id' => 'app id'}) }
+    subject { configuration.send(option) }
 
-      it 'loads the app id value' do
-        expect(subject).to eq 'app id'
-      end
+    it "fetchings the option from the config" do
+      expect(subject).to eq option
     end
   end
 
-  describe '#apk_path' do
-    let(:apk_path) { 'apk_path' }
-    let(:track) { 'track' }
-    let(:configuration) { PlayTime::Configuration.new({ track => apk_path }) }
+  PlayTime::Configuration::OPTIONS.each do |option|
+    describe "##{option}" do
+      let(:option) { option }
 
-    subject { configuration.apk_path(track: track) }
-
-    before do
-      allow(PlayTime::Track).to receive(:validate!)
-    end
-
-    it 'returns the apk path' do
-      expect(subject).to eq apk_path
-    end
-
-    it 'validates the track' do
-      subject
-
-      expect(PlayTime::Track).to have_received(:validate!).with(track)
+      it_behaves_like 'configuration option'
     end
   end
 end
