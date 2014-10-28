@@ -1,6 +1,5 @@
 require 'google/api_client'
 
-require 'play_time/authorization'
 require 'play_time/runner'
 require 'play_time/apk'
 
