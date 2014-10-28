@@ -22,6 +22,13 @@ module PlayTime
       save
     end
 
+    def update(track, version_code)
+      create_insert
+      @version_code = version_code
+      update_track(track)
+      save
+    end
+
     private
 
     attr_reader :edit_id, :version_code
