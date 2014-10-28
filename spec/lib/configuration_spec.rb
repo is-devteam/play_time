@@ -26,4 +26,44 @@ describe PlayTime::Configuration do
       it_behaves_like 'configuration option'
     end
   end
+
+  describe '.exists?' do
+    before do
+      allow(File).to receive(:exist?).and_return(true)
+      allow(PlayTime).to receive(:config_path).and_return('/path')
+    end
+
+    it 'delegates to file' do
+      PlayTime::Configuration.exists?
+
+      expect(File).to have_received(:exist?).with('/path')
+    end
+  end
+
+  describe '.create_config' do
+    let(:config_path) { '/config/path.yml' }
+    let(:config_dir) { '/config/dir' }
+
+    subject { PlayTime::Configuration.create_config(config_dir, config_path) }
+
+    before do
+      allow(FileUtils).to receive(:mkdir_p)
+    end
+
+    context 'when config dir exists' do
+      before do
+        allow(File).to receive(:exist?).and_return(true)
+      end
+
+      it 'does not create a config dir' do
+        expect(FileUtils).not_to have_received(:mkdir_p).with(config_dir)
+      end
+    end
+
+    context 'when config dir does not exist' do
+      before do
+        allow(File).to receive(:exist?).and_return(false)
+      end
+    end
+  end
 end

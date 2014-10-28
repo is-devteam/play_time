@@ -13,6 +13,18 @@ module PlayTime
       package_name
     ).freeze
 
+    def self.exists?
+      File.exist? PlayTime.config_path
+    end
+
+    def self.create_config(config_dir, config_path)
+      unless File.exist?(config_dir)
+        FileUtils.mkdir_p(config_dir)
+      end
+
+      FileUtils.cp("#{__dir__}/templates/play_time.yml", config_path)
+    end
+
     def initialize(config)
       @config = config
     end
