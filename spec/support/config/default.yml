@@ -1,4 +1,3 @@
-app_id: app id
 package_name: com.example.app
 secret_path: /path/to/secret/secret.p12
 apk_path: /path/to/alpha/app.apk
