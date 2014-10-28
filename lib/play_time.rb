@@ -22,5 +22,14 @@ module PlayTime
     def promote(version_code, track)
       Promote.promote(version_code, track)
     end
+
+    def install
+      if Configuration.exists?
+        puts "You already have a config file in #{config_path}!"
+      else
+        puts "Generating a new config file: #{config_path}"
+        Configuration.create_config('config', config_path)
+      end
+    end
   end
 end

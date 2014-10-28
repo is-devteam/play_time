@@ -35,4 +35,37 @@ describe PlayTime, if: PlayTime.config_path.end_with?('default.yml') do
       expect(PlayTime::Promote).to have_received(:promote).with(version_code, track)
     end
   end
+
+  describe '.install' do
+    subject { PlayTime.install }
+
+    context 'when configuration exists' do
+      it 'outputs message' do
+        allow(PlayTime::Configuration).to receive(:exists?).and_return(true)
+
+        expect{
+          subject
+        }.to output("You already have a config file in #{PlayTime.config_path}!\n").to_stdout
+      end
+    end
+
+    context 'when the configuration does not exist' do
+
+      before do
+        allow(PlayTime::Configuration).to receive(:create_config)
+        allow(PlayTime::Configuration).to receive(:exists?).and_return(false)
+      end
+
+      it 'outputs message' do
+        expect{
+          subject
+        }.to output("Generating a new config file: #{PlayTime.config_path}\n").to_stdout
+      end
+
+      it 'creates the config' do
+        subject
+        expect(PlayTime::Configuration).to have_received(:create_config).with('config', PlayTime.config_path)
+      end
+    end
+  end
 end
