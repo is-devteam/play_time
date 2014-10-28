@@ -6,8 +6,8 @@ require 'play_time/version'
 Gem::Specification.new do |spec|
   spec.name          = "play_time"
   spec.version       = PlayTime::VERSION
-  spec.authors       = ["Yuki Nishijima and Trevor John"]
-  spec.email         = ["pair+tjohn+ynishijima@pivotal.io"]
+  spec.authors       = ["IS Dev team"]
+  spec.email         = ["devteam@isapp.com"]
   spec.summary       = %q{PlayTime is a gem for uploading apks to the Google Play Store}
   spec.description   = %q{More to come}
   spec.homepage      = "https://github.com/is-devteam/play_time"
