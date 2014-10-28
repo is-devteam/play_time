@@ -1,7 +1,7 @@
 require 'play_time/tasks'
 
 describe 'play_time tasks' do
-  describe 'production' do
+  describe 'upload' do
     shared_examples_for 'upload task' do
       it 'uploads an apk to production' do
         allow(PlayTime).to receive(:upload)
@@ -14,6 +14,24 @@ describe 'play_time tasks' do
 
     PlayTime::Track::TRACKS.each do |track|
       it_behaves_like 'upload task' do
+        let(:track) { track }
+      end
+    end
+  end
+
+  describe 'promote' do
+    shared_examples_for 'promote task' do
+      it 'promotes the version number' do
+        allow(PlayTime).to receive(:promote)
+
+        Rake::Task["play_time:promote:#{track}"].invoke("232")
+
+        expect(PlayTime).to have_received(:promote).with(track, 232)
+      end
+    end
+
+    PlayTime::Track::TRACKS.each do |track|
+      it_behaves_like 'promote task' do
         let(:track) { track }
       end
     end

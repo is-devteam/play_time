@@ -11,6 +11,15 @@ namespace :play_time do
     end
   end
 
+  namespace :promote do
+    PlayTime::Track::TRACKS.each do |track|
+      desc "Promote apk version code to #{track}"
+      task(track, :version_code) do |task, args|
+        PlayTime.promote(track, args[:version_code].to_i)
+      end
+    end
+  end
+
   desc 'Creates a config file in config/play_time.yml'
   task :install do
     PlayTime.install
