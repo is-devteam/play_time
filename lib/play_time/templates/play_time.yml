@@ -1,0 +1,7 @@
+package_name: # package name
+secret_path: # path to secret.p12
+secret_passphrase: # secret.p12 passphrase
+apk_path: # path to apk
+client_name: # Google developer client application name
+client_version: # Google developer client application version
+issuer: # issuer for Google developer application
