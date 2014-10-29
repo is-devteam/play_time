@@ -1,6 +1,6 @@
 # PlayTime [![Build Status](https://travis-ci.org/is-devteam/play_time.svg?branch=master)](https://travis-ci.org/is-devteam/play_time)
 
-PlayTime simplifies 
+PlayTime simplifies deploying apps to the Google Play Store.
 
 ## Installation
 
