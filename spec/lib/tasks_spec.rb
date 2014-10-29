@@ -6,7 +6,9 @@ describe 'play_time tasks' do
       it 'uploads an apk to production' do
         allow(PlayTime).to receive(:upload)
 
-        Rake::Task["play_time:upload:#{track}"].invoke
+        without_output do
+          Rake::Task["play_time:upload:#{track}"].invoke
+        end
 
         expect(PlayTime).to have_received(:upload).with(track)
       end
@@ -51,7 +53,9 @@ describe 'play_time tasks' do
 
     context "when config file doesn't exist" do
       it 'generates an exmaple config file' do
-        Rake::Task['play_time:install'].invoke
+        without_output do
+          Rake::Task['play_time:install'].invoke
+        end
 
         expect(File).to exist(config_file)
         expect(open(File.expand_path("lib/play_time/templates/play_time.yml")).read). to eq(open(config_file).read)
@@ -60,16 +64,20 @@ describe 'play_time tasks' do
 
     context "when config file already exists" do
       before do
-        Rake::Task['play_time:install'].invoke
-        Rake::Task['play_time:install'].reenable
+        without_output do
+          Rake::Task['play_time:install'].invoke
+          Rake::Task['play_time:install'].reenable
+        end
       end
 
       it "doesn't do anything" do
         sleep(0.5)
 
-        expect do
-          Rake::Task['play_time:install'].invoke
-        end.not_to change { File.open(PlayTime.config_path).mtime }
+        expect {
+          without_output do
+            Rake::Task['play_time:install'].invoke
+          end
+        }.not_to change { File.open(PlayTime.config_path).mtime }
       end
     end
   end

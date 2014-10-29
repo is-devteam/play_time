@@ -63,7 +63,8 @@ describe PlayTime, if: PlayTime.config_path.end_with?('default.yml') do
       end
 
       it 'creates the config' do
-        subject
+        without_output { subject }
+
         expect(PlayTime::Configuration).to have_received(:create_config).with('config', PlayTime.config_path)
       end
     end
