@@ -3,8 +3,8 @@ require 'play_time/client'
 module PlayTime
   class Promote
     class << self
-      def promote(version_code, track)
-        new(Client.new).promote(version_code, track)
+      def promote(track, version_code)
+        new(Client.new).promote(track, version_code)
       end
     end
 
@@ -14,7 +14,7 @@ module PlayTime
       @client = client
     end
 
-    def promote(version_code, track)
+    def promote(track, version_code)
       client.authorize!
       client.update(track, version_code)
     end

@@ -19,8 +19,8 @@ module PlayTime
       Upload.upload(track)
     end
 
-    def promote(version_code, track)
-      Promote.promote(version_code, track)
+    def promote(track, version_code)
+      Promote.promote(track, version_code)
     end
 
     def install

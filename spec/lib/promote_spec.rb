@@ -6,7 +6,7 @@ describe PlayTime::Promote do
     let(:promote) { instance_double(PlayTime::Promote) }
     let(:client) { instance_double(PlayTime::Client) }
 
-    subject { PlayTime::Promote.promote(version_code, track) }
+    subject { PlayTime::Promote.promote(track, version_code) }
 
     before do
       allow(promote).to receive(:promote)
@@ -17,7 +17,7 @@ describe PlayTime::Promote do
     it 'promotes the track' do
       subject
 
-      expect(promote).to have_received(:promote).with(version_code, track)
+      expect(promote).to have_received(:promote).with(track, version_code)
     end
 
     it 'instantiates upload with new authorization and client' do
@@ -31,7 +31,7 @@ describe PlayTime::Promote do
     let(:client) { instance_double(PlayTime::Client) }
     let(:promote) { PlayTime::Promote.new(client) }
 
-    subject { promote.promote(version_code, track) }
+    subject { promote.promote(track, version_code) }
 
     before do
       allow(client).to receive(:authorize!)
