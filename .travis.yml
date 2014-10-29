@@ -1,0 +1,20 @@
+script: "bundle exec rake spec"
+
+rvm:
+  - 2.0.0
+  - 2.1
+  - 2.2.0-preview1
+  - ruby-head
+  - jruby
+  - rbx
+
+env:
+  - PLAY_TIME_CONFIG_PATH=spec/support/config/default.yml
+
+matrix:
+  allow_failures:
+    - rvm: 2.2.0-preview1
+    - rvm: ruby-head
+    - rvm: jruby
+    - rvm: rbx
+  fast_finish: true
