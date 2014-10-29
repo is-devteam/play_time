@@ -93,6 +93,7 @@ PlayTime.promote(PlayTime::Track::BETA, <version_code>)
 
 * add promotion syntax like `rake play_time:promote['alpha', 'beta']`
 * Add more precise steps for linking your Google Play account and Google Developer accounts.
+* add nice logging to std out and/or progress bar
 
 ## Contributing
 
