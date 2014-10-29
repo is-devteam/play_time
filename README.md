@@ -79,7 +79,7 @@ PlayTime.install
 # modify the config file
 
 PlayTime::Track::TRACKS
-> ['alpha', 'beta', 'rollout', 'production]
+> ['alpha', 'beta', 'rollout', 'production']
 
 track = PlayTime::Track::ALPHA
 PlayTime.upload(track)
